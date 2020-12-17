@@ -13,6 +13,7 @@ import $ from "jquery";
 import "./NavMenu.css";
 import cookie from "js-cookie";
 import { Button, Modal, ModalHeader, ModalFooter } from "reactstrap";
+import Logo from "../images/sword.png";
 
 export class NavMenu extends Component {
   static displayName = NavMenu.name;
@@ -68,7 +69,7 @@ export class NavMenu extends Component {
                 to={`/users/${cookie.get("UserId")}/games`}
                 onClick={() => this.setState({ collapsed: true })}
               >
-                (DwF)
+                <img className="logo-img" src={Logo} alt="logo" />
               </NavbarBrand>
               <NavbarToggler onClick={this.toggleNavbar} />
               <Collapse
@@ -125,7 +126,7 @@ export class NavMenu extends Component {
                 to="/"
                 onClick={() => this.setState({ collapsed: true })}
               >
-                (DwF)
+                <img className="logo-img" src={Logo} alt="logo" />
               </NavbarBrand>
               <NavbarToggler onClick={this.toggleNavbar} />
               <Collapse
