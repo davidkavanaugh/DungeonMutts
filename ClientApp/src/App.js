@@ -3,8 +3,8 @@ import { Route } from "react-router";
 import { Layout } from "./components/Layout";
 import { Login } from "./components/Login";
 import { Register } from "./components/Register";
-import { Games } from "./components/Games";
-import { Heroes } from "./components/Heroes";
+import { ListGames } from "./components/Games/ListGames";
+import { ListHeroes } from "./components/Heroes/ListHeroes";
 import { BrowserRouter as Router } from "react-router-dom";
 
 import "./custom.css";
@@ -18,8 +18,8 @@ export default class App extends Component {
         <Layout>
           <Route exact path="/" component={Login} />
           <Route path="/register" component={Register} />
-          <Route path="/users/:userId/games" component={Games} />
-          <Route path="/users/:userId/heroes" component={Heroes} />
+          <Route path="/users/:userId/games" component={ListGames} />
+          <Route path="/users/:userId/heroes" component={ListHeroes} />
         </Layout>
       </Router>
     );

@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import cookie from "js-cookie";
 
-export class Heroes extends Component {
-  static displayName = Heroes.name;
+export class ListHeroes extends Component {
+  static displayName = ListHeroes.name;
 
   componentDidMount() {
     if (!cookie.get("UserId")) {
@@ -15,7 +15,6 @@ export class Heroes extends Component {
   }
 
   render() {
-    console.log(cookie.get("UserId"));
     return <React.Fragment>all Heroes</React.Fragment>;
   }
 }

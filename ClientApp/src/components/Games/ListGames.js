@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import cookie from "js-cookie";
 
-export class Games extends Component {
-  static displayName = Games.name;
+export class ListGames extends Component {
+  static displayName = ListGames.name;
 
   componentDidMount() {
     if (!cookie.get("UserId")) {
