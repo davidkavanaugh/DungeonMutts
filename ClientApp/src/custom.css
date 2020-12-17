@@ -1,0 +1,52 @@
+/* Provide sufficient contrast against white background */
+a {
+  color: white;
+}
+a:visited {
+  color: white;
+}
+a:active {
+  color: white;
+}
+
+body {
+  font-family: "Press Start 2P", cursive;
+}
+
+code {
+  color: #e01a76;
+}
+
+#navbar-brand {
+  color: white;
+}
+
+.btn-primary {
+  color: #fff;
+  background-color: #6c757d;
+  border-color: #6c757d;
+}
+
+.btn-secondary {
+  color: #fff;
+  background-color: rgb(52, 58, 64);
+  border-color: rgb(52, 58, 64);
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.red-text {
+  height: 20px;
+  font-size: 15px;
+  margin: 1px 0px;
+  color: red;
+}
+
+.form-btn {
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
