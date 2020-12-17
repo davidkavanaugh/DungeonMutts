@@ -89,14 +89,6 @@ export class NavMenu extends Component {
                     </NavLink>
                   </NavItem>
                   <NavItem>
-                    <NavLink
-                      tag={Link}
-                      to={`/users/${cookie.get("UserId")}/heroes`}
-                    >
-                      Heroes
-                    </NavLink>
-                  </NavItem>
-                  <NavItem>
                     <NavLink tag={Link} to="#">
                       <span onClick={this.toggle}>Logout</span>
                       <Modal
