@@ -4,7 +4,6 @@ import { Layout } from "./components/Layout";
 import { Login } from "./components/Login";
 import { Register } from "./components/Register";
 import { ListGames } from "./components/Games/ListGames";
-import { ListHeroes } from "./components/Heroes/ListHeroes";
 import { BrowserRouter as Router } from "react-router-dom";
 
 import "./custom.css";
@@ -19,7 +18,6 @@ export default class App extends Component {
           <Route exact path="/" component={Login} />
           <Route path="/register" component={Register} />
           <Route path="/users/:userId/games" component={ListGames} />
-          <Route path="/users/:userId/heroes" component={ListHeroes} />
         </Layout>
       </Router>
     );
