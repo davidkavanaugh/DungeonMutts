@@ -20,6 +20,6 @@ export class PlayGame extends Component {
   }
 
   render() {
-    return <div id="new-game">Detail Game</div>;
+    return <div id="game-canvas">Detail Game</div>;
   }
 }

@@ -1,25 +1,32 @@
-import React, { Component } from "react";
+import React from "react";
+import { Button } from "reactstrap";
 import cookie from "js-cookie";
 
-export class NewGame extends Component {
-  static displayName = NewGame.name;
-  constructor(props) {
-    super(props);
-    this.state = {};
-  }
-
-  componentDidMount() {
-    // check if user belongs here
-    if (!cookie.get("UserId")) {
-      this.props.history.push("");
-    } else {
-      if (cookie.get("UserId") !== this.props.match.params.userId) {
-        this.props.history.push(`/users/${cookie.get("UserId")}/games`);
-      }
-    }
-  }
-
-  render() {
-    return <div id="new-game">new game</div>;
-  }
-}
+const createGame = () => {
+  const requestOptions = {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      userId: cookie.get("UserId"),
+    }),
+  };
+  fetch("api/games", requestOptions)
+    .then((response) => response.json())
+    .then((data) => {
+      console.log(data);
+      cookie.set("GameId", data.gameId);
+      window.location.replace(
+        `/users/${cookie.get("UserId")}/games/${data.gameId}/heroes/new`
+      );
+    })
+    .catch((err) => console.log(err));
+};
+export const NewGame = () => {
+  return (
+    <Button onClick={createGame} color="secondary">
+      New Game
+    </Button>
+  );
+};

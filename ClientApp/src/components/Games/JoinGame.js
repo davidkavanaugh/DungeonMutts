@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Button } from "reactstrap";
 import cookie from "js-cookie";
 
 export class JoinGame extends Component {
@@ -8,18 +9,10 @@ export class JoinGame extends Component {
     this.state = {};
   }
 
-  componentDidMount() {
-    // check if user belongs here
-    if (!cookie.get("UserId")) {
-      this.props.history.push("");
-    } else {
-      if (cookie.get("UserId") !== this.props.match.params.userId) {
-        this.props.history.push(`/users/${cookie.get("UserId")}/games`);
-      }
-    }
-  }
+  componentDidMount() {}
+  // to={`/users/${cookie.get("UserId")}/games/join`}
 
   render() {
-    return <div id="new-game">join game</div>;
+    return <Button color="secondary">Join Game</Button>;
   }
 }

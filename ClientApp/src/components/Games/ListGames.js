@@ -1,7 +1,7 @@
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
 import cookie from "js-cookie";
-import { Button } from "reactstrap";
+import { JoinGame } from "./JoinGame";
+import { NewGame } from "./NewGame";
 import "./ListGames.css";
 
 export class ListGames extends Component {
@@ -33,12 +33,8 @@ export class ListGames extends Component {
           return <div key={key}>{game}</div>;
         })}
         <div id="list-games-buttons">
-          <Link to={`/users/${cookie.get("UserId")}/games/new`}>
-            <Button color="primary">New Game</Button>
-          </Link>
-          <Link to={`/users/${cookie.get("UserId")}/games/join`}>
-            <Button color="secondary">Join Game</Button>
-          </Link>
+          <NewGame />
+          <JoinGame />
         </div>
       </div>
     );

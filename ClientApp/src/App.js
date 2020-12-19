@@ -1,12 +1,12 @@
 import React, { Component } from "react";
-import { Route } from "react-router";
+import { Route, Switch } from "react-router";
 import { Layout } from "./components/Layout";
 import { Login } from "./components/Login";
 import { Register } from "./components/Register";
 import { ListGames } from "./components/Games/ListGames";
-import { NewGame } from "./components/Games/NewGame";
 import { JoinGame } from "./components/Games/JoinGame";
 import { PlayGame } from "./components/Games/PlayGame";
+import { NewHero } from "./components/Heroes/NewHero";
 
 import { BrowserRouter as Router } from "react-router-dom";
 
@@ -19,16 +19,25 @@ export default class App extends Component {
     return (
       <Router>
         <Layout>
-          <Route exact path="/" component={Login} />
-          <Route exact path="/register" component={Register} />
-          <Route exact path="/users/:userId/games" component={ListGames} />
-          <Route
-            exact
-            path="/users/:userId/games/:gameId"
-            component={PlayGame}
-          />
-          <Route exact path="/users/:userId/games/new" component={NewGame} />
-          <Route exact path="/users/:userId/games/join" component={JoinGame} />
+          <Switch>
+            <Route exact path="/" component={Login} />
+            <Route exact path="/register" component={Register} />
+            <Route
+              exact
+              path="/users/:userId([0-9]{1,})/games"
+              component={ListGames}
+            />
+            <Route
+              exact
+              path="/users/:userId([0-9]{1,})/games/:gameId([0-9]{1,})"
+              component={PlayGame}
+            />
+            <Route
+              exact
+              path="/users/:userId([0-9]{1,})/games/:gameId([0-9]{1,})/heroes/new"
+              component={NewHero}
+            />
+          </Switch>
         </Layout>
       </Router>
     );
