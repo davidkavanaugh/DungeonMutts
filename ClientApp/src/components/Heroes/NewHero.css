@@ -11,10 +11,24 @@
   margin: 5px;
 }
 .active {
-  border: 3px dotted red;
   border-radius: 10px;
   filter: grayscale(0);
   transition: filter 0.5s;
+}
+
+#dalmation.active {
+  background-color: red;
+}
+
+#dachshund.active {
+  background-color: green;
+}
+
+#greyhound.active {
+  background-color: yellow;
+}
+#poodle.active {
+  background-color: blue;
 }
 
 .inactive {

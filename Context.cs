@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-namespace DwF.Models
+namespace DungeonMutts.Models
 {
 
     public class APIContext : DbContext

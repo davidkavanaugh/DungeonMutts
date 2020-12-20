@@ -1,0 +1,149 @@
+#game-canvas {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+#game-header {
+  font-size: 10px;
+  display: flex;
+  justify-content: space-between;
+  outline: 1px solid green;
+}
+
+.game-header-cell {
+  outline: 1px dotted red;
+  width: 110px;
+}
+
+#game-footer {
+  font-size: 10px;
+}
+
+#next-turn {
+  outline: 1px dotted red;
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+}
+
+#player-count {
+  outline: 1px dotted red;
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+}
+
+#pause-btn {
+  text-align: center;
+}
+
+#game-level {
+  text-align: right;
+}
+
+#enemy {
+  outline: 1px solid green;
+  margin-top: 10px;
+}
+
+#enemy-name {
+  outline: 1px dotted red;
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+  width: 75%;
+}
+
+#enemy-health {
+  outline: 1px dotted red;
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+  width: 75%;
+}
+
+#enemy-avatar {
+  outline: 1px dotted red;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+  height: 175px;
+  width: 175px;
+}
+#message {
+  outline: 1px solid green;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 10px;
+  height: 50px;
+  width: 75%;
+}
+#hero {
+  outline: 1px solid green;
+  margin-top: 10px;
+  display: flex;
+  width: 290px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#hero-avatar {
+  outline: 1px dotted red;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  height: 90px;
+  width: 90px;
+}
+
+#hero-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 100%;
+}
+
+#player-username {
+  outline: 1px dotted red;
+  height: 35px;
+  display: flex;
+  align-items: flex-end;
+  font-size: 15px;
+}
+#hero-health {
+  outline: 1px dotted red;
+  height: 25px;
+  display: flex;
+  align-items: flex-end;
+}
+#hero-mana {
+  outline: 1px dotted red;
+  height: 25px;
+  display: flex;
+  align-items: flex-end;
+}
+
+#actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+  width: 290px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.action {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 40px;
+  width: 95px;
+  font-size: 13px;
+}

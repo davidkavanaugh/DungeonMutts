@@ -13,7 +13,7 @@ import $ from "jquery";
 import "./NavMenu.css";
 import cookie from "js-cookie";
 import { Button, Modal, ModalHeader, ModalFooter } from "reactstrap";
-import Logo from "../images/sword.png";
+import Logo from "../images/logo.png";
 
 export class NavMenu extends Component {
   static displayName = NavMenu.name;
@@ -62,56 +62,55 @@ export class NavMenu extends Component {
     if (cookie.get("UserId")) {
       return (
         <header>
-          <Navbar className="navbar-expand-sm navbar-toggleable-sm mb-3" dark>
-            <Container onClick={(e) => this.setState({ clicked: e.target })}>
-              <NavbarBrand
-                tag={Link}
-                to={`/users/${cookie.get("UserId")}/games`}
-                onClick={() => this.setState({ collapsed: true })}
-              >
-                <img className="logo-img" src={Logo} alt="logo" />
-              </NavbarBrand>
-              <NavbarToggler onClick={this.toggleNavbar} />
-              <Collapse
-                className="d-sm-inline-flex flex-sm-row-reverse"
-                isOpen={!this.state.collapsed}
-                navbar
-              >
-                <ul
-                  className="navbar-nav flex-grow"
-                  onClick={this.toggleNavbar}
-                >
-                  <NavItem>
-                    <NavLink
-                      tag={Link}
-                      to={`/users/${cookie.get("UserId")}/games`}
+          <Navbar
+            onClick={(e) => this.setState({ clicked: e.target })}
+            className="navbar-expand-sm navbar-toggleable-sm mb-3"
+            dark
+          >
+            <NavbarBrand
+              tag={Link}
+              to={`/users/${cookie.get("UserId")}/games`}
+              onClick={() => this.setState({ collapsed: true })}
+            >
+              <img className="logo-img" src={Logo} alt="logo" />
+            </NavbarBrand>
+            <NavbarToggler onClick={this.toggleNavbar} />
+            <Collapse
+              className="d-sm-inline-flex flex-sm-row-reverse"
+              isOpen={!this.state.collapsed}
+              navbar
+            >
+              <ul className="navbar-nav flex-grow" onClick={this.toggleNavbar}>
+                <NavItem>
+                  <NavLink
+                    tag={Link}
+                    to={`/users/${cookie.get("UserId")}/games`}
+                  >
+                    Games
+                  </NavLink>
+                </NavItem>
+                <NavItem>
+                  <NavLink tag={Link} to="#">
+                    <span onClick={this.toggle}>Logout</span>
+                    <Modal
+                      isOpen={this.state.modal}
+                      toggle={this.toggle}
+                      className="text-dark"
                     >
-                      Games
-                    </NavLink>
-                  </NavItem>
-                  <NavItem>
-                    <NavLink tag={Link} to="#">
-                      <span onClick={this.toggle}>Logout</span>
-                      <Modal
-                        isOpen={this.state.modal}
-                        toggle={this.toggle}
-                        className="text-dark"
-                      >
-                        <ModalHeader toggle={this.toggle}>Logout?</ModalHeader>
-                        <ModalFooter>
-                          <Button color="light" onClick={this.toggle}>
-                            Cancel
-                          </Button>
-                          <Button color="secondary" onClick={this.handleLogout}>
-                            Logout
-                          </Button>{" "}
-                        </ModalFooter>
-                      </Modal>
-                    </NavLink>
-                  </NavItem>
-                </ul>
-              </Collapse>
-            </Container>
+                      <ModalHeader toggle={this.toggle}>Logout?</ModalHeader>
+                      <ModalFooter>
+                        <Button color="light" onClick={this.toggle}>
+                          Cancel
+                        </Button>
+                        <Button color="secondary" onClick={this.handleLogout}>
+                          Logout
+                        </Button>{" "}
+                      </ModalFooter>
+                    </Modal>
+                  </NavLink>
+                </NavItem>
+              </ul>
+            </Collapse>
           </Navbar>
         </header>
       );
@@ -119,38 +118,37 @@ export class NavMenu extends Component {
       // if user is not logged in
       return (
         <header>
-          <Navbar className="navbar-expand-sm navbar-toggleable-sm mb-3" dark>
-            <Container onClick={(e) => this.setState({ clicked: e.target })}>
-              <NavbarBrand
-                tag={Link}
-                to="/"
-                onClick={() => this.setState({ collapsed: true })}
-              >
-                <img className="logo-img" src={Logo} alt="logo" />
-              </NavbarBrand>
-              <NavbarToggler onClick={this.toggleNavbar} />
-              <Collapse
-                className="d-sm-inline-flex flex-sm-row-reverse"
-                isOpen={!this.state.collapsed}
-                navbar
-              >
-                <ul
-                  className="navbar-nav flex-grow"
-                  onClick={this.toggleNavbar}
-                >
-                  <NavItem>
-                    <NavLink tag={Link} to="/">
-                      Login
-                    </NavLink>
-                  </NavItem>
-                  <NavItem>
-                    <NavLink tag={Link} to="/register">
-                      Register
-                    </NavLink>
-                  </NavItem>
-                </ul>
-              </Collapse>
-            </Container>
+          <Navbar
+            onClick={(e) => this.setState({ clicked: e.target })}
+            className="navbar-expand-sm navbar-toggleable-sm mb-3"
+            dark
+          >
+            <NavbarBrand
+              tag={Link}
+              to="/"
+              onClick={() => this.setState({ collapsed: true })}
+            >
+              <img className="logo-img" src={Logo} alt="logo" />
+            </NavbarBrand>
+            <NavbarToggler onClick={this.toggleNavbar} />
+            <Collapse
+              className="d-sm-inline-flex flex-sm-row-reverse"
+              isOpen={!this.state.collapsed}
+              navbar
+            >
+              <ul className="navbar-nav flex-grow" onClick={this.toggleNavbar}>
+                <NavItem>
+                  <NavLink tag={Link} to="/">
+                    Login
+                  </NavLink>
+                </NavItem>
+                <NavItem>
+                  <NavLink tag={Link} to="/register">
+                    Register
+                  </NavLink>
+                </NavItem>
+              </ul>
+            </Collapse>
           </Navbar>
         </header>
       );

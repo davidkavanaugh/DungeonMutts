@@ -4,9 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using DwF.Models;
+using DungeonMutts.Models;
 
-namespace DwF.Controllers
+namespace DungeonMutts.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
@@ -21,30 +21,6 @@ namespace DwF.Controllers
             _context = context;
         }
 
-        // [HttpPost]
-        // public async Task<ActionResult<Game>> PostGame([FromBody] NewGameRequest request)
-        // {
-        //     Console.WriteLine(request);
-        //     User userDocument = _context.Users.FirstOrDefault(user => user.UserId == request.userId);
-        //     Game newGame = new Game()
-        //     {
-        //         Creator = userDocument
-        //     };
-        //     _context.Games.Add(newGame);
-
-        //     Player newPlayer = new Player()
-        //     {
-        //         User = userDocument,
-        //         Game = newGame
-        //     };
-        //     _context.Players.Add(newPlayer);
-
-        //     await _context.SaveChangesAsync();
-        //     Console.WriteLine(newGame);
-        //     Console.WriteLine(newGame.GameId);
-
-        //     return CreatedAtAction("Task", new { id = newGame.GameId }, newGame);
-        // }
         [HttpPost]
         public async Task<ActionResult> PostGame([FromBody] NewGameRequest request)
         {

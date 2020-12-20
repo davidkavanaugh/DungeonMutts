@@ -6,8 +6,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc.NewtonsoftJson;
-using DwF.Models;
-namespace DwF
+using DungeonMutts.Models;
+namespace DungeonMutts
 {
     public class Startup
     {

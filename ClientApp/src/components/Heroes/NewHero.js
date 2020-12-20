@@ -1,10 +1,10 @@
 import React, { Component } from "react";
 import cookie from "js-cookie";
-import { Button, Form, FormGroup, Input } from "reactstrap";
-import BarbarianImg from "../../images/barbarian.png";
-import WizardImg from "../../images/wizard.png";
-import PaladinImg from "../../images/paladin.png";
-import RangerImg from "../../images/ranger.png";
+import { Button } from "reactstrap";
+import DalmationImg from "../../images/dalmation.png";
+import DachshundImg from "../../images/dachshund.png";
+import GreyhoundImg from "../../images/greyhound.png";
+import PoodleImg from "../../images/poodle.png";
 import "./NewHero.css";
 
 export class NewHero extends Component {
@@ -12,7 +12,6 @@ export class NewHero extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      heroname: "",
       heroClass: "",
     };
   }
@@ -34,62 +33,60 @@ export class NewHero extends Component {
     });
   };
 
+  handleSubmit = () => {
+    window.location.replace(`/games/${cookie.get("GameId")}`);
+  };
+
   render() {
     return (
       <React.Fragment>
         <div id="heroClasses">
           <div>
             <img
-              id="barbarian"
-              src={BarbarianImg}
-              alt="select the barbarian"
+              id="dalmation"
+              src={DalmationImg}
+              alt="select the dalmation"
               className={
-                this.state.heroClass === "barbarian" ? "active" : "inactive"
+                this.state.heroClass === "dalmation" ? "active" : "inactive"
               }
               onClick={this.toggleSelection}
             />
             <img
-              id="wizard"
-              src={WizardImg}
-              alt="select the wizard"
+              id="poodle"
+              src={PoodleImg}
+              alt="select the poodle"
               className={
-                this.state.heroClass === "wizard" ? "active" : "inactive"
+                this.state.heroClass === "poodle" ? "active" : "inactive"
               }
               onClick={this.toggleSelection}
             />
           </div>
           <div>
             <img
-              id="paladin"
-              src={PaladinImg}
-              alt="select the paladin"
+              id="greyhound"
+              src={GreyhoundImg}
+              alt="select the greyhound"
               className={
-                this.state.heroClass === "paladin" ? "active" : "inactive"
+                this.state.heroClass === "greyhound" ? "active" : "inactive"
               }
               onClick={this.toggleSelection}
             />
             <img
-              id="ranger"
-              src={RangerImg}
-              alt="select the ranger"
+              id="dachshund"
+              src={DachshundImg}
+              alt="select the dachshund"
               className={
-                this.state.heroClass === "ranger" ? "active" : "inactive"
+                this.state.heroClass === "dachshund" ? "active" : "inactive"
               }
               onClick={this.toggleSelection}
             />
           </div>
         </div>
-        <Form>
-          <FormGroup>
-            <Input
-              type="text"
-              name="heroname"
-              id="heroname"
-              placeholder="Hero Name"
-            />
-          </FormGroup>
-          <Button>Submit</Button>
-        </Form>
+        <div className="text-center">
+          <Button id="play-btn" onClick={this.handleSubmit} color="primary">
+            Play
+          </Button>
+        </div>
       </React.Fragment>
     );
   }

@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Identity;
-using DwF.Models;
+using DungeonMutts.Models;
 
-namespace DwF.Controllers
+namespace DungeonMutts.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]

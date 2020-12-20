@@ -4,7 +4,7 @@ import { Layout } from "./components/Layout";
 import { Login } from "./components/Login";
 import { Register } from "./components/Register";
 import { ListGames } from "./components/Games/ListGames";
-import { JoinGame } from "./components/Games/JoinGame";
+// import { JoinGame } from "./components/Games/JoinGame";
 import { PlayGame } from "./components/Games/PlayGame";
 import { NewHero } from "./components/Heroes/NewHero";
 
@@ -36,6 +36,11 @@ export default class App extends Component {
               exact
               path="/users/:userId([0-9]{1,})/games/:gameId([0-9]{1,})/heroes/new"
               component={NewHero}
+            />
+            <Route
+              exact
+              path="/games/:gameId([0-9]{1,})"
+              component={PlayGame}
             />
           </Switch>
         </Layout>
