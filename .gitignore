@@ -234,4 +234,4 @@ _Pvt_Extensions
 .vscode
 appsettings.json
 package-lock.json
-.env
+.envMigrations/
