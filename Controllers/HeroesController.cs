@@ -48,5 +48,33 @@ namespace DungeonMutts.Controllers
             return CreatedAtAction("PostHero", new { id = newHero.HeroId }, newHero);
 
         }
+        [HttpPost("{heroId}/attack")]
+        public async Task<ActionResult> Attack([FromBody] ActionRequest request, int heroId)
+        {
+            Hero heroDocument = _context.Heroes
+            .Include(hero => hero.User)
+            .FirstOrDefault(hero => hero.HeroId == heroId);
+
+            ActionResponse response = heroDocument.Attack(request.LevelNumber, heroDocument.User.Username);
+            if (request.TargetType == "enemy")
+            {
+                Enemy enemyDocument = _context.Enemies.FirstOrDefault(enemy => enemy.EnemyId == request.TargetId);
+                enemyDocument.Health -= response.Amount;
+            }
+            if (request.TargetType == "boss")
+            {
+                Enemy enemyDocument = _context.Enemies.FirstOrDefault(enemy => enemy.EnemyId == request.TargetId);
+                enemyDocument.Health -= response.Amount;
+            }
+
+            Game gameDocument = _context.Games
+            .Include(game => game.Players)
+            .FirstOrDefault(game => game.GameId == request.GameId);
+            gameDocument.Message = response.Message;
+            gameDocument.TurnCounter++;
+
+            await _context.SaveChangesAsync();
+            return Ok();
+        }
     }
 }

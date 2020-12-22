@@ -1,8 +1,9 @@
 using System;
+using System.Collections.Generic;
 
 interface IHero
 {
-    string Attack();
+    ActionResponse Attack(int LevelNumber, string username);
     string Spell();
     string Heal();
 }

@@ -18,6 +18,7 @@ export class PlayGame extends Component {
     super(props);
     this.state = {
       enemy: {},
+      enemyTurn: false,
       game: {
         level: {},
         heroes: [],
@@ -65,7 +66,6 @@ export class PlayGame extends Component {
           enemy: response.level.enemies[0],
           heroes: response.heroes,
           turnCounter: response.turnCounter,
-          turn: response.heroes[response.turnCounter],
         });
         for (let i = 0; i < response.heroes.length; i++) {
           if (response.heroes[i].user.userId == cookie.get("UserId")) {
@@ -74,15 +74,33 @@ export class PlayGame extends Component {
             });
           }
         }
-        if (response.turnCounter + 1 > response.heroes.length - 1) {
+        if (response.turnCounter >= response.heroes.length) {
+          // enemy's turn
+          const randNumGen = (min, max) => {
+            return Math.floor(Math.random() * (max - min) + min);
+          };
+          const randomNumber = randNumGen(0, response.heroes.length);
           this.setState({
-            next: response.level.enemies[0],
+            enemyTurn: true,
+            turn: response.heroes[randomNumber],
+            next: response.heroes[0],
           });
         } else {
+          // player's turn
           this.setState({
-            next: response.heroes[response.turnCounter + 1],
+            turn: response.heroes[response.turnCounter],
           });
+          if (response.turnCounter + 1 > response.heroes.length - 1) {
+            this.setState({
+              next: response.level.enemies[0],
+            });
+          } else {
+            this.setState({
+              next: response.heroes[response.turnCounter + 1],
+            });
+          }
         }
+
         console.log(this.state);
       });
   };
@@ -122,7 +140,8 @@ export class PlayGame extends Component {
         <div id="message" className="text-center">
           {this.state.game.message}
         </div>
-        <div id="hero">
+        {/* current turn or target */}
+        <div id="hero" className={this.state.enemyTurn ? "targeted" : null}>
           <img
             id="hero-avatar"
             src={`/images/heroes/${this.state.turn.heroClass}.png`}
@@ -147,11 +166,18 @@ export class PlayGame extends Component {
             </div>
           </div>
         </div>
-        <ActionButtons turn={this.state.turn} />
+
+        <ActionButtons
+          hero={this.state.turn}
+          target={this.state.enemy}
+          levelNumber={this.state.game.level.number}
+          enemyTurn={this.state.enemyTurn}
+        />
         <div id="game-footer">
           <div id="next-turn">
             next:
-            {this.state.turnCounter + 1 > this.state.game.heroes.length - 1
+            {this.state.turnCounter + 1 > this.state.game.heroes.length - 1 &&
+            !this.state.enemyTurn
               ? this.state.next.name
               : this.state.next.user.username}
           </div>
@@ -175,7 +201,8 @@ export class PlayGame extends Component {
                     id="small-hero"
                     key={key}
                     className={
-                      hero.user.userId == this.state.turn.user.userId
+                      hero.user.userId == this.state.turn.user.userId &&
+                      !this.state.enemyTurn
                         ? "current"
                         : null
                     }

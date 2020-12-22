@@ -1,5 +1,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.Collections.Generic;
+
 
 public class Hero : IHero
 {
@@ -15,26 +17,38 @@ public class Hero : IHero
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
 
-    public string Attack()
+    public ActionResponse Attack(int level, string username)
     {
-        string response = "";
-        if (HeroClass == "Dalmation")
+        int dmg = 0;
+        string msg = $"{username} misses";
+        Random random = new Random();
+        int roll = random.Next(7);
+        if (roll != 0)
         {
-            response = "Dalmation attacks";
+            if (HeroClass == "dalmation")
+            {
+                dmg = roll + level + 2;
+            }
+            if (HeroClass == "poodle")
+            {
+                dmg = roll + level;
+            }
+            if (HeroClass == "greyhound")
+            {
+                dmg = roll + level;
+            }
+            if (HeroClass == "dachshund")
+            {
+                dmg = roll + level + 1;
+            }
+            msg = $"{username} attacks for {dmg} damage";
         }
-        if (HeroClass == "Poodle")
+        ActionResponse result = new ActionResponse()
         {
-            response = "Poodle attacks";
-        }
-        if (HeroClass == "Greyhound")
-        {
-            response = "Greyhound attacks";
-        }
-        if (HeroClass == "Dachshund")
-        {
-            response = "Dachshund attacks";
-        }
-        return response;
+            Amount = dmg,
+            Message = msg
+        };
+        return result;
     }
 
     public string Spell()

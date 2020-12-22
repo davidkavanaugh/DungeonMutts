@@ -1,5 +1,7 @@
 import React, { Component } from "react";
-import { Button } from "reactstrap";
+import { Attack } from "./Attack";
+import { Spell } from "./Spell";
+import { Heal } from "./Heal";
 import cookie from "js-cookie";
 
 import "./ActionButtons.css";
@@ -11,18 +13,19 @@ export class ActionButtons extends Component {
   }
 
   render() {
-    if (this.props.turn.user.userId == cookie.get("UserId")) {
+    if (
+      this.props.hero.user.userId == cookie.get("UserId") &&
+      !this.props.enemyTurn
+    ) {
       return (
         <div id="actions">
-          <Button id="attack" className="action" color="primary">
-            attack
-          </Button>
-          <Button id="spell" className="action" color="primary">
-            spell
-          </Button>
-          <Button id="heal" className="action" color="primary">
-            heal
-          </Button>
+          <Attack
+            hero={this.props.hero}
+            target={this.props.target}
+            levelNumber={this.props.levelNumber}
+          />
+          <Spell />
+          <Heal />
         </div>
       );
     } else {
