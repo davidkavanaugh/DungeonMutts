@@ -19,19 +19,23 @@ export class Attack extends Component {
   }
 
   handleAttack = () => {
-    console.log("attack");
+    let targetId = this.props.target.enemyId;
+    if (this.state.targetType === "boss") {
+      targetId = this.props.target.bossId;
+    }
     const requestOptions = {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        TargetId: this.props.target.enemyId,
+        TargetId: targetId,
         TargetType: this.state.targetType,
         LevelNumber: this.props.levelNumber,
         GameId: cookie.get("GameId"),
       }),
     };
+    console.log(requestOptions);
     fetch(`api/heroes/${this.props.hero.heroId}/attack`, requestOptions).then(
       (response) => {
         console.log(response);

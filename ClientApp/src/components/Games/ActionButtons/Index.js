@@ -24,8 +24,16 @@ export class ActionButtons extends Component {
             target={this.props.target}
             levelNumber={this.props.levelNumber}
           />
-          <Spell />
-          <Heal />
+          <Spell
+            hero={this.props.hero}
+            target={this.props.target}
+            levelNumber={this.props.levelNumber}
+          />
+          <Heal
+            hero={this.props.hero}
+            levelNumber={this.props.levelNumber}
+            heroesList={this.props.heroesList}
+          />
         </div>
       );
     } else {

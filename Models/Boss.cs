@@ -1,7 +1,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 
-public class Boss
+public class Boss : IEnemy
 {
     [Key]
     public int BossId { get; set; }
@@ -19,6 +19,25 @@ public class Boss
         Health = health;
         HealthCapacity = health;
         ImgSrc = imgSrc;
+    }
+
+    public ActionResponse Attack(int level, string username)
+    {
+        int dmg = 0;
+        string msg = $"{Name} misses";
+        Random random = new Random();
+        int roll = random.Next(7);
+        if (roll != 0)
+        {
+            dmg = roll + level;
+            msg = $"{Name} attacks {username} for {dmg} damage";
+        }
+        ActionResponse result = new ActionResponse()
+        {
+            Amount = dmg,
+            Message = msg
+        };
+        return result;
     }
 
 }

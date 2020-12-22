@@ -1,4 +1,3 @@
-using System.ComponentModel.DataAnnotations;
 public class ActionResponse
 {
     public int Amount { get; set; }

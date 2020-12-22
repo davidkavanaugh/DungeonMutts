@@ -51,47 +51,71 @@ public class Hero : IHero
         return result;
     }
 
-    public string Spell()
+    public ActionResponse Spell(int level, string username)
     {
-        string response = "";
-        if (HeroClass == "Dalmation")
+        int dmg = 0;
+        string msg = $"{username} misses";
+        Random random = new Random();
+        int roll = random.Next(7);
+        if (roll != 0)
         {
-            response = "Dalmation casts spell";
+            if (HeroClass == "dalmation")
+            {
+                dmg = roll + level;
+            }
+            if (HeroClass == "poodle")
+            {
+                dmg = roll + level;
+            }
+            if (HeroClass == "greyhound")
+            {
+                dmg = roll + level + 2;
+            }
+            if (HeroClass == "dachshund")
+            {
+                dmg = roll + level + 1;
+            }
+            msg = $"{username} casts spell for {dmg} damage";
         }
-        if (HeroClass == "Poodle")
+        ActionResponse result = new ActionResponse()
         {
-            response = "Poodle casts spell";
-        }
-        if (HeroClass == "Greyhound")
-        {
-            response = "Greyhound casts spell";
-        }
-        if (HeroClass == "Dachshund")
-        {
-            response = "Dachshund casts spell";
-        }
-        return response;
+            Amount = dmg,
+            Message = msg
+        };
+        return result;
     }
 
-    public string Heal()
+    public ActionResponse Heal(int level, string username, string target)
     {
-        string response = "";
-        if (HeroClass == "Dalmation")
+        int amt = 0;
+        string msg = $"{username} misses";
+        Random random = new Random();
+        int roll = random.Next(7);
+        if (roll != 0)
         {
-            response = "Dalmation heals";
+            if (HeroClass == "dalmation")
+            {
+                amt = roll + level;
+            }
+            if (HeroClass == "poodle")
+            {
+                amt = roll + level + 2;
+            }
+            if (HeroClass == "greyhound")
+            {
+                amt = roll + level;
+            }
+            if (HeroClass == "dachshund")
+            {
+                amt = roll + level + 1;
+            }
+            msg = $"{username} heals {target} for {amt}";
         }
-        if (HeroClass == "Poodle")
+        ActionResponse result = new ActionResponse()
         {
-            response = "Poodle heals";
-        }
-        if (HeroClass == "Greyhound")
-        {
-            response = "Greyhound heals";
-        }
-        if (HeroClass == "Dachshund")
-        {
-            response = "Dachshund heals";
-        }
-        return response;
+            Amount = amt,
+            Message = msg
+        };
+        return result;
     }
 }

@@ -53,6 +53,35 @@ export class PlayGame extends Component {
     this.getGame(this.props.match.params.gameId);
   }
 
+  enemyAttack(targetId, levelNumber, enemy) {
+    if (enemy.bossId) {
+      enemy.id = enemy.bossId;
+      enemy.type = "boss";
+    } else {
+      enemy.id = enemy.enemyId;
+      enemy.type = "enemy";
+    }
+    setTimeout(function () {
+      const requestOptions = {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          TargetId: targetId,
+          LevelNumber: levelNumber,
+          GameId: cookie.get("GameId"),
+          EnemyType: enemy.type,
+        }),
+      };
+      fetch(`api/enemies/${enemy.id}/attack`, requestOptions).then(
+        (response) => {
+          console.log(response);
+        }
+      );
+    }, 2000);
+  }
+
   getGame = (gameId) => {
     const requestOptions = {
       method: "GET",
@@ -63,10 +92,28 @@ export class PlayGame extends Component {
       .then((response) => {
         this.setState({
           game: response,
-          enemy: response.level.enemies[0],
           heroes: response.heroes,
           turnCounter: response.turnCounter,
         });
+
+        const getEnemy = () => {
+          if (response.level.enemies[0].health <= 0) {
+            // if enemy 1 is dead, check if enemy 2 is dead
+            if (response.level.enemies[1].health <= 0) {
+              // if enemy 2 is dead, use boss
+              return response.level.boss;
+            } else {
+              return response.level.enemies[1];
+            }
+          } else {
+            return response.level.enemies[0];
+          }
+        };
+
+        this.setState({
+          enemy: getEnemy(),
+        });
+
         for (let i = 0; i < response.heroes.length; i++) {
           if (response.heroes[i].user.userId == cookie.get("UserId")) {
             this.setState({
@@ -85,6 +132,12 @@ export class PlayGame extends Component {
             turn: response.heroes[randomNumber],
             next: response.heroes[0],
           });
+          this.enemyAttack(
+            response.heroes[randomNumber].heroId,
+            response.level.number,
+            getEnemy()
+          );
+          // enemy attacks player
         } else {
           // player's turn
           this.setState({
@@ -92,7 +145,7 @@ export class PlayGame extends Component {
           });
           if (response.turnCounter + 1 > response.heroes.length - 1) {
             this.setState({
-              next: response.level.enemies[0],
+              next: getEnemy(),
             });
           } else {
             this.setState({
@@ -134,7 +187,7 @@ export class PlayGame extends Component {
           <img
             id="enemy-avatar"
             src={`/images/enemies/${this.state.enemy.imgSrc}`}
-            alt="fight the first beast of spring"
+            alt="image of the beast"
           />
         </div>
         <div id="message" className="text-center">
@@ -160,7 +213,7 @@ export class PlayGame extends Component {
             <div id="hero-mana">
               <Progress
                 color="primary"
-                value={this.state.turn.health}
+                value={this.state.turn.mana}
                 max={11 + this.state.game.level.number}
               />
             </div>
@@ -170,6 +223,7 @@ export class PlayGame extends Component {
         <ActionButtons
           hero={this.state.turn}
           target={this.state.enemy}
+          heroesList={this.state.game.heroes}
           levelNumber={this.state.game.level.number}
           enemyTurn={this.state.enemyTurn}
         />
@@ -225,7 +279,7 @@ export class PlayGame extends Component {
                       <div id="small-hero-mana">
                         <Progress
                           color="primary"
-                          value={hero.health}
+                          value={hero.mana}
                           max={11 + this.state.game.level.number}
                         />
                       </div>

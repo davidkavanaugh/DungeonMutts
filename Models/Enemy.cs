@@ -1,7 +1,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 
-public class Enemy
+public class Enemy : IEnemy
 {
     [Key]
     public int EnemyId { get; set; }
@@ -19,5 +19,23 @@ public class Enemy
         Health = health;
         HealthCapacity = health;
         ImgSrc = imgSrc;
+    }
+    public ActionResponse Attack(int level, string username)
+    {
+        int dmg = 0;
+        string msg = $"{Name} misses";
+        Random random = new Random();
+        int roll = random.Next(7);
+        if (roll != 0)
+        {
+            dmg = roll + level;
+            msg = $"{Name} attacks {username} for {dmg} damage";
+        }
+        ActionResponse result = new ActionResponse()
+        {
+            Amount = dmg,
+            Message = msg
+        };
+        return result;
     }
 }
