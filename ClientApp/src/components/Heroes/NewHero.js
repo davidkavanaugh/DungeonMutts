@@ -5,6 +5,8 @@ import DalmationImg from "../../images/dalmation.png";
 import DachshundImg from "../../images/dachshund.png";
 import GreyhoundImg from "../../images/greyhound.png";
 import PoodleImg from "../../images/poodle.png";
+import $ from "jquery";
+
 import "./NewHero.css";
 
 export class NewHero extends Component {
@@ -34,7 +36,27 @@ export class NewHero extends Component {
   };
 
   handleSubmit = () => {
-    window.location.replace(`/games/${cookie.get("GameId")}`);
+    const requestOptions = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        UserId: cookie.get("UserId"),
+        GameId: cookie.get("GameId"),
+        HeroClass: this.state.heroClass,
+      }),
+    };
+    fetch("api/heroes", requestOptions)
+      .then((data) => data.json())
+      .then((response) => {
+        if (response.errors) {
+          console.log(response.errors);
+        } else {
+          console.log(response);
+          window.location.replace(`/games/${cookie.get("GameId")}`);
+        }
+      });
   };
 
   render() {
@@ -83,7 +105,12 @@ export class NewHero extends Component {
           </div>
         </div>
         <div className="text-center">
-          <Button id="play-btn" onClick={this.handleSubmit} color="primary">
+          <Button
+            id="play-btn"
+            onClick={this.handleSubmit}
+            color="primary"
+            disabled={this.state.heroClass.length < 1 ? true : false}
+          >
             Play
           </Button>
         </div>

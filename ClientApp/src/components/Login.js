@@ -36,13 +36,14 @@ export class Login extends Component {
       }),
     };
     fetch("api/users/login", requestOptions)
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.errors) {
-          $("#username").html("Not Found");
+      .then((data) => data.json())
+      .then((response) => {
+        console.log(response);
+        if (response.errors) {
+          $("#username").html("Invalid Username/Password");
         } else {
-          cookie.set("UserId", data.userId);
-          this.props.history.push(`/users/${data.userId}/games`);
+          cookie.set("UserId", response.userId);
+          this.props.history.push(`/users/${response.userId}/games`);
         }
       });
   };

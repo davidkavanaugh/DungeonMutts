@@ -59,7 +59,8 @@ namespace DungeonMutts.Controllers
             // If no user exists with provided username
             if (userDocument == null)
             {
-                return StatusCode(403);
+                string[] arr = { "Invalid Username/Password" };
+                return BadRequest(new { title = "Bad Request", status = 400, errors = new { Username = arr } });
             }
 
             // Initialize hasher object
@@ -71,7 +72,8 @@ namespace DungeonMutts.Controllers
             // result can be compared to 0 for failure
             if (result == 0)
             {
-                return StatusCode(403);
+                string[] arr = { "Invalid Username/Password" };
+                return BadRequest(new { title = "Bad Request", status = 400, errors = new { Username = arr } });
             }
 
             return Ok(userDocument);

@@ -24,24 +24,47 @@ namespace DungeonMutts.Controllers
         [HttpPost]
         public async Task<ActionResult> PostGame([FromBody] NewGameRequest request)
         {
-            Console.WriteLine(request);
-            User userDocument = _context.Users.FirstOrDefault(user => user.UserId == request.userId);
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            List<Enemy> level1Enemies = new List<Enemy>();
+            level1Enemies.Add(new Enemy()
+            {
+                Name = "Ram",
+                Health = 13
+            });
+
+            level1Enemies.Add(new Enemy()
+            {
+                Name = "Bull",
+                Health = 14
+            });
+
+            Boss level1Boss = new Boss()
+            {
+                Name = "Castor & Pollux",
+                Health = 15
+            };
+
+            Level level1 = new Level()
+            {
+                Enemies = level1Enemies,
+                Boss = level1Boss
+            };
+
+            User userDocument = _context.Users.FirstOrDefault(user => user.UserId == request.UserId);
             Game newGame = new Game()
             {
-                Creator = userDocument
+                Creator = userDocument,
+                GameName = request.GameName,
+                Level = level1
+
             };
             await _context.Games.AddAsync(newGame);
 
-            Player newPlayer = new Player()
-            {
-                User = userDocument,
-                Game = newGame
-            };
-            await _context.Players.AddAsync(newPlayer);
-
             await _context.SaveChangesAsync();
-            Console.WriteLine(newGame);
-            Console.WriteLine(newGame.GameId);
 
             return CreatedAtAction("PostGame", new { id = newGame.GameId }, newGame);
         }

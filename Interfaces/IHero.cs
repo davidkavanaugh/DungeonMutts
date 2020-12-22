@@ -1,8 +1,8 @@
-// using System;
+using System;
 
-// interface IHero
-// {
-//     void Attack();
-//     void Spell();
-//     void Heal();
-// }
+interface IHero
+{
+    string Attack();
+    string Spell();
+    string Heal();
+}
