@@ -1,67 +1,218 @@
 import React, { Component } from "react";
-import { Button } from "reactstrap";
+import {
+  Button,
+  Progress,
+  Modal,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+} from "reactstrap";
+import cookie from "js-cookie";
+
 import "./PlayGame.css";
+import { ActionButtons } from "./ActionButtons/Index";
 
 export class PlayGame extends Component {
   static displayName = PlayGame.name;
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      enemy: {},
+      game: {
+        level: {},
+        heroes: [],
+      },
+      modal: false,
+      myHero: {
+        user: {
+          username: "",
+        },
+      },
+      next: {
+        name: "",
+        user: {
+          username: "",
+        },
+      },
+      turnCounter: 0,
+      turn: {
+        user: {
+          username: "",
+        },
+      },
+    };
   }
 
   componentDidMount() {
     // check if user belongs here
-    // if (!cookie.get("UserId")) {
-    //   this.props.history.push("");
-    // } else {
-    //   if (cookie.get("UserId") !== this.props.match.params.userId) {
-    //     this.props.history.push(`/users/${cookie.get("UserId")}/games`);
-    //   }
-    // }
+    if (!cookie.get("UserId")) {
+      this.props.history.push("");
+    }
+
+    this.getGame(this.props.match.params.gameId);
   }
+
+  getGame = (gameId) => {
+    const requestOptions = {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+    };
+    fetch(`api/games/${gameId}`, requestOptions)
+      .then((data) => data.json())
+      .then((response) => {
+        this.setState({
+          game: response,
+          enemy: response.level.enemies[0],
+          heroes: response.heroes,
+          turnCounter: response.turnCounter,
+          turn: response.heroes[response.turnCounter],
+        });
+        for (let i = 0; i < response.heroes.length; i++) {
+          if (response.heroes[i].user.userId == cookie.get("UserId")) {
+            this.setState({
+              myHero: response.heroes[i],
+            });
+          }
+        }
+        if (response.turnCounter + 1 > response.heroes.length - 1) {
+          this.setState({
+            next: response.level.enemies[0],
+          });
+        } else {
+          this.setState({
+            next: response.heroes[response.turnCounter + 1],
+          });
+        }
+        console.log(this.state);
+      });
+  };
+
+  toggle = () => {
+    this.setState({
+      modal: !this.state.modal,
+    });
+  };
 
   render() {
     return (
       <div id="game-canvas">
         <div id="game-header">
           <div id="game-name" className="game-header-cell">
-            game name
-          </div>
-          <div id="pause-btn" className="game-header-cell">
-            pause
+            {this.state.game.gameName}
           </div>
           <div id="game-level" className="game-header-cell">
-            lvl 1
+            Lvl {this.state.game.level.number}
           </div>
         </div>
         <div id="enemy">
-          <div id="enemy-name">enemy name</div>
-          <div id="enemy-health">enemy health</div>
-          <div id="enemy-avatar">enemy avatar</div>
+          <div id="enemy-name">{this.state.enemy.name}</div>
+          <div id="enemy-health">
+            <Progress
+              color="danger"
+              value={this.state.enemy.health}
+              max={this.state.enemy.healthCapacity}
+            />
+          </div>
+          <img
+            id="enemy-avatar"
+            src={`/images/enemies/${this.state.enemy.imgSrc}`}
+            alt="fight the first beast of spring"
+          />
         </div>
-        <div id="message">message</div>
+        <div id="message" className="text-center">
+          {this.state.game.message}
+        </div>
         <div id="hero">
-          <div id="hero-avatar">hero avatar</div>
+          <img
+            id="hero-avatar"
+            src={`/images/heroes/${this.state.turn.heroClass}.png`}
+            className={this.state.turn.heroClass}
+            alt="hero avatar"
+          />
           <div id="hero-info">
-            <div id="player-username">username</div>
-            <div id="hero-health">health</div>
-            <div id="hero-mana">mana</div>
+            <div id="player-username">{this.state.turn.user.username}</div>
+            <div id="hero-health">
+              <Progress
+                color="danger"
+                value={this.state.turn.health}
+                max={11 + this.state.game.level.number}
+              />
+            </div>
+            <div id="hero-mana">
+              <Progress
+                color="primary"
+                value={this.state.turn.health}
+                max={11 + this.state.game.level.number}
+              />
+            </div>
           </div>
         </div>
-        <div id="actions">
-          <Button id="attack" className="action" color="primary">
-            attack
-          </Button>
-          <Button id="spell" className="action" color="primary">
-            spell
-          </Button>
-          <Button id="heal" className="action" color="primary">
-            heal
-          </Button>
-        </div>
+        <ActionButtons turn={this.state.turn} />
         <div id="game-footer">
-          <div id="next-turn">next: username</div>
-          <div id="player-count">players(num)</div>
+          <div id="next-turn">
+            next:
+            {this.state.turnCounter + 1 > this.state.game.heroes.length - 1
+              ? this.state.next.name
+              : this.state.next.user.username}
+          </div>
+          <div
+            id="player-count"
+            onClick={this.toggle}
+            style={{ cursor: "pointer" }}
+          >
+            players({this.state.game.heroes.length})
+          </div>
+          <Modal
+            isOpen={this.state.modal}
+            toggle={this.toggle}
+            className="text-dark"
+          >
+            <ModalHeader toggle={this.toggle}>Players</ModalHeader>
+            <ModalBody>
+              {this.state.game.heroes.map((hero, key) => {
+                return (
+                  <div
+                    id="small-hero"
+                    key={key}
+                    className={
+                      hero.user.userId == this.state.turn.user.userId
+                        ? "current"
+                        : null
+                    }
+                  >
+                    <img
+                      id="small-hero-avatar"
+                      src={`/images/heroes/${hero.heroClass}.png`}
+                      className={hero.heroClass}
+                      alt="hero avatar"
+                    />
+                    <div id="small-hero-info">
+                      <div id="small-player-username">{hero.user.username}</div>
+                      <div id="small-hero-health">
+                        <Progress
+                          color="danger"
+                          value={hero.health}
+                          max={11 + this.state.game.level.number}
+                        />
+                      </div>
+                      <div id="small-hero-mana">
+                        <Progress
+                          color="primary"
+                          value={hero.health}
+                          max={11 + this.state.game.level.number}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </ModalBody>
+            <ModalFooter>
+              <Button color="secondary" onClick={this.toggle}>
+                OK
+              </Button>
+            </ModalFooter>
+          </Modal>
         </div>
       </div>
     );

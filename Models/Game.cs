@@ -13,8 +13,9 @@ public class Game
     public string GameName { get; set; }
     public List<Hero> Heroes { get; set; } = new List<Hero>();
     public Level Level { get; set; }
+    public string Message { get; set; } = "Level 1: Spring";
     public List<Player> Players { get; set; }
-    public int TurnId { get; set; }
+    public int TurnCounter { get; set; } = 0;
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
 

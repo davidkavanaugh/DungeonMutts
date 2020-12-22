@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import {
   Collapse,
+  ModalBody,
   Navbar,
   NavbarBrand,
   NavbarToggler,
@@ -23,12 +24,17 @@ export class NavMenu extends Component {
       collapsed: true,
       modal: false,
       quitModal: false,
+      inviteModal: false,
       clicked: "",
+      gameCode: "",
     };
   }
 
   componentDidMount = () => {
     this.jQueryCode(this);
+    if (window.location.pathname.slice(1, 6) === "games") {
+      this.getGame(cookie.get("GameId"));
+    }
   };
 
   jQueryCode = (nav) => {
@@ -39,6 +45,20 @@ export class NavMenu extends Component {
         });
       }
     });
+  };
+
+  getGame = (gameId) => {
+    const requestOptions = {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+    };
+    fetch(`api/games/${gameId}`, requestOptions)
+      .then((data) => data.json())
+      .then((response) => {
+        this.setState({
+          gameCode: response.gameCode,
+        });
+      });
   };
 
   toggle = () => {
@@ -59,6 +79,12 @@ export class NavMenu extends Component {
     });
   };
 
+  toggleInvite = () => {
+    this.setState({
+      inviteModal: !this.state.inviteModal,
+    });
+  };
+
   handleLogout = () => {
     cookie.remove("UserId");
     window.location.replace("");
@@ -72,17 +98,32 @@ export class NavMenu extends Component {
   render() {
     // if user is looged in
     if (cookie.get("UserId")) {
+      // if user is in game window
       if (window.location.pathname.slice(1, 6) === "games") {
         return (
           <header>
             <Navbar
+              id="gameNav"
               onClick={(e) => this.setState({ clicked: e.target })}
               className="navbar-expand-sm navbar-toggleable-sm mb-3"
               dark
             >
-              <NavbarBrand>
-                <img className="logo-img" src={Logo} alt="logo" />
-              </NavbarBrand>
+              <Button onClick={this.toggleInvite} color="primary">
+                Invite
+              </Button>
+              <Modal
+                isOpen={this.state.inviteModal}
+                toggle={this.toggleInvite}
+                className="text-dark"
+              >
+                <ModalHeader toggle={this.toggleInvite}>Game Code:</ModalHeader>
+                <ModalBody>{this.state.gameCode}</ModalBody>
+                <ModalFooter>
+                  <Button color="secondary" onClick={this.toggleInvite}>
+                    OK
+                  </Button>
+                </ModalFooter>
+              </Modal>
               <Button onClick={this.toggleQuit} color="primary">
                 Quit
               </Button>

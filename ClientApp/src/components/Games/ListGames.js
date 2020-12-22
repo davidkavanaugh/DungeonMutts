@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Button } from "reactstrap";
 import cookie from "js-cookie";
 import { JoinGame } from "./JoinGame";
 import { NewGame } from "./NewGame";
@@ -24,14 +25,42 @@ export class ListGames extends Component {
     }
 
     // fetch games
+    const requestOptions = {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+    };
+    fetch(`api/users/${cookie.get("UserId")}/games`, requestOptions)
+      .then((data) => data.json())
+      .then((response) => {
+        this.setState({
+          games: response,
+        });
+        console.log(this.state.games);
+      });
+  }
+
+  handleClick(gameId) {
+    cookie.set("GameId", gameId);
+    window.location.replace(`/games/${gameId}`);
   }
 
   render() {
     return (
       <div id="list-games">
-        {this.state.games.map((game, key) => {
-          return <div key={key}>{game}</div>;
-        })}
+        <div id="my-games">
+          {this.state.games.map((game, key) => {
+            return (
+              <Button
+                color="secondary"
+                key={key}
+                onClick={() => this.handleClick(game.gameId)}
+              >
+                {game.gameName}
+              </Button>
+            );
+          })}
+        </div>
+
         <div id="list-games-buttons">
           <NewGame />
           <JoinGame />

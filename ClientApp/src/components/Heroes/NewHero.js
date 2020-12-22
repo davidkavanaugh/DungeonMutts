@@ -1,11 +1,6 @@
 import React, { Component } from "react";
 import cookie from "js-cookie";
 import { Button } from "reactstrap";
-import DalmationImg from "../../images/dalmation.png";
-import DachshundImg from "../../images/dachshund.png";
-import GreyhoundImg from "../../images/greyhound.png";
-import PoodleImg from "../../images/poodle.png";
-import $ from "jquery";
 
 import "./NewHero.css";
 
@@ -66,7 +61,7 @@ export class NewHero extends Component {
           <div>
             <img
               id="dalmation"
-              src={DalmationImg}
+              src="/images/heroes/dalmation.png"
               alt="select the dalmation"
               className={
                 this.state.heroClass === "dalmation" ? "active" : "inactive"
@@ -75,7 +70,7 @@ export class NewHero extends Component {
             />
             <img
               id="poodle"
-              src={PoodleImg}
+              src="/images/heroes/poodle.png"
               alt="select the poodle"
               className={
                 this.state.heroClass === "poodle" ? "active" : "inactive"
@@ -86,7 +81,7 @@ export class NewHero extends Component {
           <div>
             <img
               id="greyhound"
-              src={GreyhoundImg}
+              src="/images/heroes/greyhound.png"
               alt="select the greyhound"
               className={
                 this.state.heroClass === "greyhound" ? "active" : "inactive"
@@ -95,7 +90,7 @@ export class NewHero extends Component {
             />
             <img
               id="dachshund"
-              src={DachshundImg}
+              src="/images/heroes/dachshund.png"
               alt="select the dachshund"
               className={
                 this.state.heroClass === "dachshund" ? "active" : "inactive"

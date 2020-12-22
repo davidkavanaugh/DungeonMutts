@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using DungeonMutts.Models;
 
 namespace DungeonMutts.Controllers
@@ -77,6 +78,18 @@ namespace DungeonMutts.Controllers
             }
 
             return Ok(userDocument);
+        }
+
+        [HttpGet("{userId}/games")]
+        public ActionResult AllGames(int userId)
+        {
+            List<Game> games = _context.Games
+            .Include(game => game.Players)
+                .ThenInclude(player => player.User)
+            .Where(game => game.Players.Any(player => player.UserId == userId))
+            .ToList();
+
+            return Ok(games);
         }
     }
 }

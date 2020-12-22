@@ -17,3 +17,8 @@ html {
   width: 30px;
   height: 30px;
 }
+
+#gameNav {
+  display: flex;
+  justify-content: space-between;
+}

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Microsoft.EntityFrameworkCore;
 using DungeonMutts.Models;
 
 namespace DungeonMutts.Controllers
@@ -30,23 +31,23 @@ namespace DungeonMutts.Controllers
             }
 
             List<Enemy> level1Enemies = new List<Enemy>();
-            level1Enemies.Add(new Enemy()
-            {
-                Name = "Ram",
-                Health = 13
-            });
+            level1Enemies.Add(new Enemy(
+                name: "Ram",
+                health: 13,
+                imgSrc: "ram.png"
+            ));
 
-            level1Enemies.Add(new Enemy()
-            {
-                Name = "Bull",
-                Health = 14
-            });
+            level1Enemies.Add(new Enemy(
+                name: "Bull",
+                health: 14,
+                imgSrc: "bull.png"
+            ));
 
-            Boss level1Boss = new Boss()
-            {
-                Name = "Castor & Pollux",
-                Health = 15
-            };
+            Boss level1Boss = new Boss(
+                name: "Castor & Pollux",
+                health: 15,
+                imgSrc: "twins.png"
+            );
 
             Level level1 = new Level()
             {
@@ -60,13 +61,32 @@ namespace DungeonMutts.Controllers
                 Creator = userDocument,
                 GameName = request.GameName,
                 Level = level1
-
             };
             await _context.Games.AddAsync(newGame);
 
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("PostGame", new { id = newGame.GameId }, newGame);
+        }
+        [HttpGet("{gameId}")]
+        public ActionResult GetGame(int gameId)
+        {
+            Game gameDocument = _context.Games
+            .Include(game => game.Level)
+                .ThenInclude(level => level.Enemies)
+            .Include(game => game.Level)
+                .ThenInclude(level => level.Boss)
+            .Include(game => game.Heroes)
+                .ThenInclude(hero => hero.User)
+            .FirstOrDefault(game => game.GameId == gameId);
+            return CreatedAtAction("GetGame", new { id = gameDocument.GameId }, gameDocument);
+        }
+        [HttpPost("{gameCode}")]
+        public ActionResult GameByCode(string gameCode)
+        {
+            Game gameDocument = _context.Games.FirstOrDefault(game => game.GameCode == gameCode);
+
+            return Ok(gameDocument);
         }
     }
 }

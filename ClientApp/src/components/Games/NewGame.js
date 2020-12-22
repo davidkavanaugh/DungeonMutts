@@ -62,7 +62,7 @@ export class NewGame extends Component {
   render() {
     return (
       <React.Fragment>
-        <Button onClick={this.toggle} color="secondary">
+        <Button onClick={this.toggle} color="primary">
           New Game
         </Button>
         <Modal
@@ -70,7 +70,7 @@ export class NewGame extends Component {
           toggle={this.toggle}
           className="text-dark"
         >
-          <ModalHeader toggle={this.toggle}>Logout?</ModalHeader>
+          <ModalHeader toggle={this.toggle}>New Game</ModalHeader>
           <ModalBody>
             <span id="gamename" className="red-text"></span>
             <Input
