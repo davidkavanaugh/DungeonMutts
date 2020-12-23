@@ -5,8 +5,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Mvc.NewtonsoftJson;
+using EntitySignal.Extensions;
 using DungeonMutts.Models;
+using EntitySignal.Hubs;
 namespace DungeonMutts
 {
     public class Startup
@@ -21,6 +22,8 @@ namespace DungeonMutts
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSignalR();
+            services.AddEntitySignal();
             services.AddControllersWithViews().AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
             services.AddDbContext<APIContext>(options => options.UseMySql(Configuration["DBInfo:ConnectionString"]));
             services.AddControllersWithViews();
@@ -52,6 +55,7 @@ namespace DungeonMutts
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapHub<EntitySignalHub>("/dataHub");
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller}/{action=Index}/{id?}");
