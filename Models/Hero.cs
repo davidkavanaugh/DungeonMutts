@@ -10,7 +10,7 @@ public class Hero : IHero
     public string HeroClass { get; set; }
     public int GameId { get; set; }
     public Game Game { get; set; }
-    public int Health { get; set; } = 12;
+    public int Health { get; set; } = 250;
     public int Mana { get; set; } = 12;
     public int UserId { get; set; }
     public User User { get; set; }

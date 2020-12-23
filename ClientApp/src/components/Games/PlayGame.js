@@ -24,6 +24,7 @@ export class PlayGame extends Component {
         level: {},
         heroes: [],
       },
+      livingHeroes: [],
       modal: false,
       myHero: {
         user: {
@@ -134,6 +135,9 @@ export class PlayGame extends Component {
             livingHeroes.push(response.heroes[i]);
           }
         }
+        this.setState({
+          livingHeroes: livingHeroes,
+        });
         if (livingHeroes.length === 0) {
           this.gameOver();
           return;
@@ -157,9 +161,15 @@ export class PlayGame extends Component {
           );
         } else {
           // player's turn
-          this.setState({
-            turn: livingHeroes[response.turnCounter],
-          });
+          if (response.turnCounter < livingHeroes.length) {
+            this.setState({
+              turn: livingHeroes[response.turnCounter],
+            });
+          } else {
+            this.setState({
+              turn: livingHeroes[0],
+            });
+          }
           if (response.turnCounter + 1 > livingHeroes.length - 1) {
             this.setState({
               next: getEnemy(),
@@ -176,7 +186,7 @@ export class PlayGame extends Component {
   };
 
   nextLevel = (gameId, currentLevel) => {
-    let newLevelNumber = currentLevel;
+    let newLevelNumber = currentLevel + 1;
     if (currentLevel === 4) {
       newLevelNumber = 1;
     }
@@ -275,7 +285,7 @@ export class PlayGame extends Component {
         <div id="game-footer">
           <div id="next-turn">
             next:
-            {this.state.turnCounter + 1 > this.state.game.heroes.length - 1 &&
+            {this.state.turnCounter + 1 > this.state.livingHeroes.length - 1 &&
             !this.state.enemyTurn
               ? this.state.next.name
               : this.state.next.user.username}
