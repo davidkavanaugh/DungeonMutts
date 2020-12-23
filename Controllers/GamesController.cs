@@ -44,7 +44,7 @@ namespace DungeonMutts.Controllers
             ));
 
             Boss level1Boss = new Boss(
-                name: "Castor & Pollux",
+                name: "Twins",
                 health: 15,
                 imgSrc: "twins.png"
             );
@@ -87,6 +87,69 @@ namespace DungeonMutts.Controllers
             Game gameDocument = _context.Games.FirstOrDefault(game => game.GameCode == gameCode);
 
             return Ok(gameDocument);
+        }
+        [HttpPost("{gameId}/levels")]
+        public async Task<ActionResult> NextLevel([FromBody] NextLevelRequest request, int gameId)
+        {
+            List<List<string>> enemyNames = new List<List<string>>();
+
+            List<string> level1Enemies = new List<string>();
+            level1Enemies.Add("Ram");
+            level1Enemies.Add("Bull");
+            level1Enemies.Add("Twins");
+
+            List<string> level2Enemies = new List<string>();
+            level2Enemies.Add("Crab");
+            level2Enemies.Add("Lion");
+            level2Enemies.Add("Bear");
+
+            List<string> level3Enemies = new List<string>();
+            level3Enemies.Add("Raven");
+            level3Enemies.Add("Scorpion");
+            level3Enemies.Add("Centaur");
+
+            List<string> level4Enemies = new List<string>();
+            level4Enemies.Add("Goat");
+            level4Enemies.Add("Dolphin");
+            level4Enemies.Add("Fish");
+
+            enemyNames.Add(level1Enemies);
+            enemyNames.Add(level2Enemies);
+            enemyNames.Add(level3Enemies);
+            enemyNames.Add(level4Enemies);
+
+            List<Enemy> levelEnemies = new List<Enemy>();
+            levelEnemies.Add(new Enemy(
+                name: enemyNames[request.LevelNumber - 1][0],
+                health: request.LevelNumber + 12,
+                imgSrc: $"{enemyNames[request.LevelNumber - 1][0].ToLower()}.png"
+            ));
+
+            levelEnemies.Add(new Enemy(
+                name: enemyNames[request.LevelNumber - 1][1],
+                health: request.LevelNumber + 13,
+                imgSrc: $"{enemyNames[request.LevelNumber - 1][1].ToLower()}.png"
+            ));
+
+            Boss levelBoss = new Boss(
+                name: enemyNames[request.LevelNumber - 1][2],
+                health: request.LevelNumber + 14,
+                imgSrc: $"{enemyNames[request.LevelNumber - 1][2].ToLower()}.png"
+            );
+
+            Level newLevel = new Level()
+            {
+                Enemies = levelEnemies,
+                Boss = levelBoss,
+                Number = request.LevelNumber
+            };
+
+            Game gameDocument = _context.Games.FirstOrDefault(game => game.GameId == gameId);
+            gameDocument.Level = newLevel;
+
+            await _context.SaveChangesAsync();
+
+            return Ok();
         }
     }
 }

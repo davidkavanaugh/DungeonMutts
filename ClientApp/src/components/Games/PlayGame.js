@@ -8,6 +8,7 @@ import {
   ModalFooter,
 } from "reactstrap";
 import cookie from "js-cookie";
+import $ from "jquery";
 
 import "./PlayGame.css";
 import { ActionButtons } from "./ActionButtons/Index";
@@ -101,7 +102,13 @@ export class PlayGame extends Component {
             // if enemy 1 is dead, check if enemy 2 is dead
             if (response.level.enemies[1].health <= 0) {
               // if enemy 2 is dead, use boss
-              return response.level.boss;
+              if (response.level.boss.health <= 0) {
+                // if boss is dead, go to next level
+                this.nextLevel(gameId, response.level.number);
+                window.location.reload();
+              } else {
+                return response.level.boss;
+              }
             } else {
               return response.level.enemies[1];
             }
@@ -121,41 +128,79 @@ export class PlayGame extends Component {
             });
           }
         }
+        let livingHeroes = [];
+        for (let i = 0; i < response.heroes.length; i++) {
+          if (response.heroes[i].health > 0) {
+            livingHeroes.push(response.heroes[i]);
+          }
+        }
+        if (livingHeroes.length === 0) {
+          this.gameOver();
+          return;
+        }
         if (response.turnCounter >= response.heroes.length) {
           // enemy's turn
           const randNumGen = (min, max) => {
             return Math.floor(Math.random() * (max - min) + min);
           };
-          const randomNumber = randNumGen(0, response.heroes.length);
+          const randomNumber = randNumGen(0, livingHeroes.length);
           this.setState({
             enemyTurn: true,
-            turn: response.heroes[randomNumber],
+            turn: livingHeroes[randomNumber],
             next: response.heroes[0],
           });
+
           this.enemyAttack(
-            response.heroes[randomNumber].heroId,
+            livingHeroes[randomNumber].heroId,
             response.level.number,
             getEnemy()
           );
-          // enemy attacks player
         } else {
           // player's turn
           this.setState({
-            turn: response.heroes[response.turnCounter],
+            turn: livingHeroes[response.turnCounter],
           });
-          if (response.turnCounter + 1 > response.heroes.length - 1) {
+          if (response.turnCounter + 1 > livingHeroes.length - 1) {
             this.setState({
               next: getEnemy(),
             });
           } else {
             this.setState({
-              next: response.heroes[response.turnCounter + 1],
+              next: livingHeroes[response.turnCounter + 1],
             });
           }
         }
 
         console.log(this.state);
       });
+  };
+
+  nextLevel = (gameId, currentLevel) => {
+    let newLevelNumber = currentLevel;
+    if (currentLevel === 4) {
+      newLevelNumber = 1;
+    }
+    const requestOptions = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        LevelNumber: newLevelNumber,
+      }),
+    };
+    fetch(`api/games/${gameId}/levels`, requestOptions).then((response) => {
+      console.log(response);
+    });
+  };
+
+  gameOver = () => {
+    $("#gameNav").html("");
+    $("#game-canvas").html("Game Over");
+    setTimeout(function () {
+      window.alert("You are all dead.");
+      window.location.replace("");
+    }, 500);
   };
 
   toggle = () => {

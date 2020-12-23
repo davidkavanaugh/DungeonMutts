@@ -50,6 +50,10 @@ namespace DungeonMutts.Controllers
             Game gameDocument = _context.Games
             .FirstOrDefault(game => game.GameId == request.GameId);
             gameDocument.Message = response.Message;
+            if (heroDocument.Health <= 0)
+            {
+                gameDocument.Message = $"{heroDocument.User.Username} has died";
+            }
             gameDocument.TurnCounter = 0;
 
             await _context.SaveChangesAsync();
