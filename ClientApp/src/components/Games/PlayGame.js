@@ -152,7 +152,7 @@ export class PlayGame extends Component {
           livingHeroes: livingHeroes,
         });
         if (livingHeroes.length === 0) {
-          this.gameOver();
+          this.gameOver(gameId);
           return;
         }
         if (response.turnCounter >= response.heroes.length) {
@@ -213,11 +213,19 @@ export class PlayGame extends Component {
     fetch(`api/games/${gameId}/levels`, requestOptions);
   };
 
-  gameOver = () => {
+  gameOver = (gameId) => {
     $("#gameNav").html("");
     $("#game-canvas").html("Game Over");
     setTimeout(function () {
-      window.location.replace("");
+      const requestOptions = {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
+      fetch(`api/games/${gameId}`, requestOptions).then(
+        window.location.replace("")
+      );
     }, 1000);
   };
 

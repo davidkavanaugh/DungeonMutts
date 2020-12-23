@@ -81,6 +81,16 @@ namespace DungeonMutts.Controllers
             .FirstOrDefault(game => game.GameId == gameId);
             return CreatedAtAction("GetGame", new { id = gameDocument.GameId }, gameDocument);
         }
+        [HttpDelete("{gameId}")]
+        public ActionResult DeleteGame(int gameId)
+        {
+            Game gameDocument = _context.Games
+            .FirstOrDefault(game => game.GameId == gameId);
+
+            _context.Games.Remove(gameDocument);
+            _context.SaveChanges();
+            return StatusCode(204);
+        }
         [HttpPost("{gameCode}")]
         public ActionResult GameByCode(string gameCode)
         {
