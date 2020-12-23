@@ -155,7 +155,7 @@ export class PlayGame extends Component {
           this.gameOver(gameId);
           return;
         }
-        if (response.turnCounter >= response.heroes.length) {
+        if (response.turnCounter >= livingHeroes.length) {
           // enemy's turn
           const randNumGen = (min, max) => {
             return Math.floor(Math.random() * (max - min) + min);
