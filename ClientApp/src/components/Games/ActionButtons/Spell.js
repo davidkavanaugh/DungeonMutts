@@ -35,11 +35,7 @@ export class Spell extends Component {
         GameId: cookie.get("GameId"),
       }),
     };
-    fetch(`api/heroes/${this.props.hero.heroId}/spell`, requestOptions).then(
-      (response) => {
-        console.log(response);
-      }
-    );
+    fetch(`api/heroes/${this.props.hero.heroId}/spell`, requestOptions);
   };
   render() {
     return (

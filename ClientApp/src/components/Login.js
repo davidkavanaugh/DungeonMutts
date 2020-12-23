@@ -38,7 +38,6 @@ export class Login extends Component {
     fetch("api/users/login", requestOptions)
       .then((data) => data.json())
       .then((response) => {
-        console.log(response);
         if (response.errors) {
           $("#username").html("Invalid Username/Password");
         } else {

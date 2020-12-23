@@ -31,11 +31,7 @@ export class Heal extends Component {
         GameId: cookie.get("GameId"),
       }),
     };
-    fetch(`api/heroes/${this.props.hero.heroId}/heal`, requestOptions).then(
-      (response) => {
-        console.log(response);
-      }
-    );
+    fetch(`api/heroes/${this.props.hero.heroId}/heal`, requestOptions);
   };
 
   toggle = () => {
@@ -67,6 +63,7 @@ export class Heal extends Component {
               return (
                 <div
                   id="small-hero"
+                  class="pointer"
                   key={key}
                   onClick={() => this.handleHeal(hero.heroId)}
                 >

@@ -35,12 +35,7 @@ export class Attack extends Component {
         GameId: cookie.get("GameId"),
       }),
     };
-    console.log(requestOptions);
-    fetch(`api/heroes/${this.props.hero.heroId}/attack`, requestOptions).then(
-      (response) => {
-        console.log(response);
-      }
-    );
+    fetch(`api/heroes/${this.props.hero.heroId}/attack`, requestOptions);
   };
   render() {
     return (

@@ -42,7 +42,6 @@ export class JoinGame extends Component {
     fetch(`api/games/${this.state.gameCode}`, requestOptions)
       .then((data) => data.json())
       .then((response) => {
-        console.log(response);
         cookie.set("GameId", response.gameId);
         window.location.replace(
           `/users/${cookie.get("UserId")}/games/${response.gameId}/heroes/new`

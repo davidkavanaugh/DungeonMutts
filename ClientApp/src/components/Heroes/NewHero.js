@@ -48,7 +48,6 @@ export class NewHero extends Component {
         if (response.errors) {
           console.log(response.errors);
         } else {
-          console.log(response);
           window.location.replace(`/games/${cookie.get("GameId")}`);
         }
       });

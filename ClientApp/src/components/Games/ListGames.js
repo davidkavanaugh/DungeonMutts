@@ -35,7 +35,6 @@ export class ListGames extends Component {
         this.setState({
           games: response,
         });
-        console.log(this.state.games);
       });
   }
 

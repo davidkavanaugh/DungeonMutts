@@ -15,3 +15,7 @@
   width: 95px;
   font-size: 13px;
 }
+
+.pointer {
+  cursor: pointer;
+}

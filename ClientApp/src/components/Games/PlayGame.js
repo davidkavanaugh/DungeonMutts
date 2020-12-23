@@ -51,11 +51,20 @@ export class PlayGame extends Component {
     if (!cookie.get("UserId")) {
       this.props.history.push("");
     }
-
     this.getGame(this.props.match.params.gameId);
+    this.timer = setInterval(() => {
+      if (!this.state.enemyTurn) {
+        this.getGame(this.props.match.params.gameId);
+      }
+    }, 300);
   }
 
-  enemyAttack(targetId, levelNumber, enemy) {
+  componentWillUnmount() {
+    clearInterval(this.timer);
+    this.timer = null;
+  }
+
+  enemyAttack = (targetId, levelNumber, enemy) => {
     if (enemy.bossId) {
       enemy.id = enemy.bossId;
       enemy.type = "boss";
@@ -63,6 +72,7 @@ export class PlayGame extends Component {
       enemy.id = enemy.enemyId;
       enemy.type = "enemy";
     }
+    const that = this;
     setTimeout(function () {
       const requestOptions = {
         method: "POST",
@@ -76,13 +86,15 @@ export class PlayGame extends Component {
           EnemyType: enemy.type,
         }),
       };
-      fetch(`api/enemies/${enemy.id}/attack`, requestOptions).then(
-        (response) => {
-          console.log(response);
-        }
-      );
+      fetch(
+        `api/enemies/${enemy.id}/attack`,
+        requestOptions
+      ).then((response) => {});
+      that.setState({
+        enemyTurn: false,
+      });
     }, 2000);
-  }
+  };
 
   getGame = (gameId) => {
     const requestOptions = {
@@ -106,6 +118,7 @@ export class PlayGame extends Component {
               if (response.level.boss.health <= 0) {
                 // if boss is dead, go to next level
                 this.nextLevel(gameId, response.level.number);
+                $("#game-canvas").html("");
                 window.location.reload();
               } else {
                 return response.level.boss;
@@ -151,7 +164,7 @@ export class PlayGame extends Component {
           this.setState({
             enemyTurn: true,
             turn: livingHeroes[randomNumber],
-            next: response.heroes[0],
+            next: livingHeroes[0],
           });
 
           this.enemyAttack(
@@ -180,8 +193,6 @@ export class PlayGame extends Component {
             });
           }
         }
-
-        console.log(this.state);
       });
   };
 
@@ -199,18 +210,15 @@ export class PlayGame extends Component {
         LevelNumber: newLevelNumber,
       }),
     };
-    fetch(`api/games/${gameId}/levels`, requestOptions).then((response) => {
-      console.log(response);
-    });
+    fetch(`api/games/${gameId}/levels`, requestOptions);
   };
 
   gameOver = () => {
     $("#gameNav").html("");
     $("#game-canvas").html("Game Over");
     setTimeout(function () {
-      window.alert("You are all dead.");
       window.location.replace("");
-    }, 500);
+    }, 1000);
   };
 
   toggle = () => {

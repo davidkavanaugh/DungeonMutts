@@ -46,7 +46,6 @@ export class NewGame extends Component {
     fetch("api/games", requestOptions)
       .then((data) => data.json())
       .then((response) => {
-        console.log(response);
         if (response.errors) {
           for (this.msg in response.errors) {
             $(`#${this.msg.toLowerCase()}`).html(response.errors[this.msg][0]);
