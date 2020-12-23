@@ -42,7 +42,7 @@ export class Login extends Component {
           $("#username").html("Invalid Username/Password");
         } else {
           cookie.set("UserId", response.userId);
-          this.props.history.push(`/users/${response.userId}/games`);
+          window.location.replace(`/users/${response.userId}/games`);
         }
       });
   };

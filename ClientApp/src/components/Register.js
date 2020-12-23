@@ -46,7 +46,7 @@ export class Register extends Component {
           }
         } else {
           cookie.set("UserId", data.userId);
-          this.props.history.push(`/users/${data.userId}/games`);
+          window.location.replace(`/users/${data.userId}/games`);
         }
       });
   };
