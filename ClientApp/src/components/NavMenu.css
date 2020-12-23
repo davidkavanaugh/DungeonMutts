@@ -22,3 +22,7 @@ html {
   display: flex;
   justify-content: space-between;
 }
+
+#gameNav.navbar-expand-sm.navbar {
+  margin-bottom: 0px !important;
+}
