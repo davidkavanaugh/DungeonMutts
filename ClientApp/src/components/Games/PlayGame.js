@@ -299,13 +299,13 @@ export class PlayGame extends Component {
           enemyTurn={this.state.enemyTurn}
         />
         <div id="game-footer">
-          <div id="next-turn">
+          {/* <div id="next-turn">
             next:
             {this.state.turnCounter + 1 > this.state.livingHeroes.length - 1 &&
             !this.state.enemyTurn
               ? this.state.next.name
               : this.state.next.user.username}
-          </div>
+          </div> */}
           <div
             id="player-count"
             onClick={this.toggle}
