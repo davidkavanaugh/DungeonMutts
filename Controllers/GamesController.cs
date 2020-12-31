@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
 using DungeonMutts.Models;
 
+
 namespace DungeonMutts.Controllers
 {
     [ApiController]
@@ -14,12 +15,13 @@ namespace DungeonMutts.Controllers
     public class GamesController : ControllerBase
     {
         private readonly ILogger<GamesController> _logger;
+
         private APIContext _context;
 
         public GamesController(ILogger<GamesController> logger, APIContext context)
         {
-            _logger = logger;
             _context = context;
+            _logger = logger;
         }
 
         [HttpPost]
@@ -79,6 +81,7 @@ namespace DungeonMutts.Controllers
             .Include(game => game.Heroes)
                 .ThenInclude(hero => hero.User)
             .FirstOrDefault(game => game.GameId == gameId);
+
             return CreatedAtAction("GetGame", new { id = gameDocument.GameId }, gameDocument);
         }
         [HttpDelete("{gameId}")]

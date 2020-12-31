@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using PusherServer;
 using DungeonMutts.Models;
 
 namespace DungeonMutts.Controllers
@@ -13,11 +15,13 @@ namespace DungeonMutts.Controllers
     [Route("api/[controller]")]
     public class EnemiesController : ControllerBase
     {
+        private readonly IConfiguration _config;
         private readonly ILogger<EnemiesController> _logger;
         private APIContext _context;
 
-        public EnemiesController(ILogger<EnemiesController> logger, APIContext context)
+        public EnemiesController(ILogger<EnemiesController> logger, APIContext context, IConfiguration config)
         {
+            _config = config;
             _logger = logger;
             _context = context;
         }
@@ -57,6 +61,18 @@ namespace DungeonMutts.Controllers
             gameDocument.TurnCounter = 0;
 
             await _context.SaveChangesAsync();
+
+            string APP_CLUSTER = _config.GetValue<string>("PUSHER_APP_CLUSTER");
+            string APP_ID = _config.GetValue<string>("PUSHER_APP_ID");
+            string APP_KEY = _config.GetValue<string>("PUSHER_APP_KEY");
+            string APP_SECRET = _config.GetValue<string>("PUSHER_APP_SECRET");
+
+            var options = new PusherOptions();
+            options.Cluster = APP_CLUSTER;
+
+            var pusher = new Pusher(APP_ID, APP_KEY, APP_SECRET, options);
+            var result = await pusher.TriggerAsync("my-channel", "my-event", new { message = "reading game" });
+
             return Ok();
         }
     }

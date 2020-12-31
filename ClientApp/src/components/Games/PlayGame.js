@@ -9,9 +9,9 @@ import {
 } from "reactstrap";
 import cookie from "js-cookie";
 import $ from "jquery";
-
-import "./PlayGame.css";
 import { ActionButtons } from "./ActionButtons/Index";
+import Pusher from "pusher-js";
+import "./PlayGame.css";
 
 export class PlayGame extends Component {
   static displayName = PlayGame.name;
@@ -51,17 +51,19 @@ export class PlayGame extends Component {
     if (!cookie.get("UserId")) {
       this.props.history.push("");
     }
-    this.getGame(this.props.match.params.gameId);
-    this.timer = setInterval(() => {
-      if (!this.state.enemyTurn) {
-        this.getGame(this.props.match.params.gameId);
+    const gameId = this.props.match.params.gameId;
+    this.getGame(gameId);
+    var pusher = new Pusher(process.env.REACT_APP_PUSHER_APP_KEY, {
+      cluster: process.env.REACT_APP_PUSHER_APP_CLUSTER,
+    });
+    var channel = pusher.subscribe("my-channel");
+    let that = this;
+    channel.bind("my-event", function (data) {
+      console.log(JSON.stringify(data));
+      if (!that.state.enemyTurn) {
+        that.getGame(gameId);
       }
-    }, 300);
-  }
-
-  componentWillUnmount() {
-    clearInterval(this.timer);
-    this.timer = null;
+    });
   }
 
   enemyAttack = (targetId, levelNumber, enemy) => {

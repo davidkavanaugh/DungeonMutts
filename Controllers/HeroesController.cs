@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using PusherServer;
 using DungeonMutts.Models;
 
 namespace DungeonMutts.Controllers
@@ -13,13 +15,16 @@ namespace DungeonMutts.Controllers
     [Route("api/[controller]")]
     public class HeroesController : ControllerBase
     {
+        private readonly IConfiguration _config;
+
         private readonly ILogger<HeroesController> _logger;
         private APIContext _context;
 
-        public HeroesController(ILogger<HeroesController> logger, APIContext context)
+        public HeroesController(ILogger<HeroesController> logger, APIContext context, IConfiguration config)
         {
             _logger = logger;
             _context = context;
+            _config = config;
         }
 
         [HttpPost]
@@ -46,8 +51,8 @@ namespace DungeonMutts.Controllers
 
             await _context.SaveChangesAsync();
             return CreatedAtAction("PostHero", new { id = newHero.HeroId }, newHero);
-
         }
+
         [HttpPost("{heroId}/attack")]
         public async Task<ActionResult> Attack([FromBody] ActionRequest request, int heroId)
         {
@@ -74,6 +79,16 @@ namespace DungeonMutts.Controllers
             gameDocument.TurnCounter++;
 
             await _context.SaveChangesAsync();
+            string APP_CLUSTER = _config.GetValue<string>("PUSHER_APP_CLUSTER");
+            string APP_ID = _config.GetValue<string>("PUSHER_APP_ID");
+            string APP_KEY = _config.GetValue<string>("PUSHER_APP_KEY");
+            string APP_SECRET = _config.GetValue<string>("PUSHER_APP_SECRET");
+
+            var options = new PusherOptions();
+            options.Cluster = APP_CLUSTER;
+
+            var pusher = new Pusher(APP_ID, APP_KEY, APP_SECRET, options);
+            var result = await pusher.TriggerAsync("my-channel", "my-event", new { message = "reading game" });
             return Ok();
         }
         [HttpPost("{heroId}/spell")]
@@ -103,7 +118,19 @@ namespace DungeonMutts.Controllers
             gameDocument.Message = response.Message;
             gameDocument.TurnCounter++;
 
+            string APP_CLUSTER = _config.GetValue<string>("PUSHER_APP_CLUSTER");
+            string APP_ID = _config.GetValue<string>("PUSHER_APP_ID");
+            string APP_KEY = _config.GetValue<string>("PUSHER_APP_KEY");
+            string APP_SECRET = _config.GetValue<string>("PUSHER_APP_SECRET");
+
+            var options = new PusherOptions();
+            options.Cluster = APP_CLUSTER;
+
             await _context.SaveChangesAsync();
+
+            var pusher = new Pusher(APP_ID, APP_KEY, APP_SECRET, options);
+            var result = await pusher.TriggerAsync("my-channel", "my-event", new { message = "reading game" });
+
             return Ok();
         }
         [HttpPost("{heroId}/heal")]
@@ -131,6 +158,18 @@ namespace DungeonMutts.Controllers
             gameDocument.TurnCounter++;
 
             await _context.SaveChangesAsync();
+
+            string APP_CLUSTER = _config.GetValue<string>("PUSHER_APP_CLUSTER");
+            string APP_ID = _config.GetValue<string>("PUSHER_APP_ID");
+            string APP_KEY = _config.GetValue<string>("PUSHER_APP_KEY");
+            string APP_SECRET = _config.GetValue<string>("PUSHER_APP_SECRET");
+
+            var options = new PusherOptions();
+            options.Cluster = APP_CLUSTER;
+
+            var pusher = new Pusher(APP_ID, APP_KEY, APP_SECRET, options);
+            var result = await pusher.TriggerAsync("my-channel", "my-event", new { message = "reading game" });
+
             return Ok();
         }
     }
